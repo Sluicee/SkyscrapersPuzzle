@@ -29,10 +29,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
 
     public void DisplayText()
     {
-        if (Random.Range(0, 10) > 8)
-            numberText.SetText(number.ToString());
-        else
-            numberText.SetText(" ");
+        numberText.SetText(number.ToString());
     }
 
     public void SetNumber(int number)

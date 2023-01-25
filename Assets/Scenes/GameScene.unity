@@ -341,9 +341,9 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 1
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 71.9, y: 0}
+  m_Spacing: {x: 70, y: 0}
   m_Constraint: 1
-  m_ConstraintCount: 6
+  m_ConstraintCount: 9
 --- !u!1 &1388077537
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,6 +439,7 @@ RectTransform:
   m_Children:
   - {fileID: 1612868626}
   - {fileID: 1136895818}
+  - {fileID: 1855655706}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -502,6 +503,8 @@ MonoBehaviour:
   squareOffset: 5
   squareScale: 1.5
   gridSquare: {fileID: 3960539216165671480, guid: e8c603e127ddb9e4796f071b3c5449d9, type: 3}
+  skyScrapersCount: {fileID: 464930640878105247, guid: 8c50b0dc2a4917e438a1720306a8a1d7, type: 3}
+  skyScrapersCountGroup: {fileID: 1855655705}
   numberButtonsGroup: {fileID: 1136895817}
   numberButton: {fileID: 2011020109003313048, guid: d3d6f73b7e094214fa4b1833b7c35e1c, type: 3}
 --- !u!222 &1612868628
@@ -536,3 +539,39 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 6
+--- !u!1 &1855655705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1855655706}
+  m_Layer: 5
+  m_Name: CountGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1855655706
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855655705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1388077541}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}

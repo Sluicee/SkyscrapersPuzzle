@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3960539215041250493}
   numberText: {fileID: 3960539216341173722}
+  number: 0
 --- !u!1 &3960539216341173724
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,10 +260,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
