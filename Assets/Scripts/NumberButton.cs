@@ -1,17 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class NumberButton : MonoBehaviour
+public class NumberButton : Selectable, IPointerClickHandler, ISubmitHandler, IPointerUpHandler, IPointerExitHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    public int value = 0;
+    [SerializeField] private TMP_Text buttonText;
+
+    public void Start()
     {
-        
+        buttonText.SetText(value.ToString());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        GameEvents.UpdateSquareNumberMethod(value);
+    }
+
+    public void OnSubmit(BaseEventData eventData)
     {
         
     }

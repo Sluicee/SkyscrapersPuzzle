@@ -5,13 +5,19 @@ using UnityEngine.UI;
 
 public class GameGrid : MonoBehaviour
 {
+    [Header ("Number Grid")]
+    [Range(3, 9)]
     [SerializeField] private int columns = 0;
     private int rows;
     [SerializeField] private float squareOffset = 0.0f;
-    [SerializeField] private GameObject gridSquare;
     [SerializeField] private float squareScale = 1.0f;
+    [SerializeField] private GameObject gridSquare;
 
-    //private List<GameObject> gridSquares = new List<GameObject>();
+    [Header("Number Buttons")]
+    [SerializeField] private GameObject numberButtonsGroup;
+    [SerializeField] private GameObject numberButton;
+    private List<GameObject> numberButtons = new List<GameObject>();
+
     private GameObject[,] gridSquares;
 
     void Start()
@@ -23,6 +29,7 @@ public class GameGrid : MonoBehaviour
         gridSquares = new GameObject[rows, columns];
         SpawnGridSquares();
         SetGridNumber();
+        SpawnGridNumberButtons();
     }
 
     void Update()
@@ -32,13 +39,17 @@ public class GameGrid : MonoBehaviour
 
     private void SpawnGridSquares()
     {
+        int squareIndex = 0;
         for (int row = 0; row < rows; ++row)
         {
             for (int column = 0; column < columns; ++column)
             {
                 gridSquares[row, column] = Instantiate(gridSquare);
+                gridSquares[row, column].GetComponent<GridSquare>().setSquareIndex(squareIndex);
                 gridSquares[row, column].transform.parent = this.transform; //instantiate this square as a child of the script holder gameobject
                 gridSquares[row, column].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
+
+                squareIndex++;
             }
         }
 
@@ -75,6 +86,15 @@ public class GameGrid : MonoBehaviour
         }
     }
 
-
+    private void SpawnGridNumberButtons()
+    {
+        for(int i = 1; i <= columns; i++)
+        {
+            numberButtons.Add(Instantiate(numberButton) as GameObject);
+            numberButtons[numberButtons.Count - 1].transform.parent = numberButtonsGroup.transform;
+            numberButtons[numberButtons.Count - 1].GetComponent<NumberButton>().value = i;
+            numberButtons[numberButtons.Count - 1].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
+        }
+    }
 
 }
