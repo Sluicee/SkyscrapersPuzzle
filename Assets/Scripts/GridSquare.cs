@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GridSquare : Selectable
 {
     [SerializeField] private TMP_Text numberText;
-    private int number;
+    public int number;
 
     void Start()
     {
@@ -22,14 +22,10 @@ public class GridSquare : Selectable
 
     public void DisplayText()
     {
-        if (number <= 0)
-        {
-            numberText.SetText(" ");
-        }
-        else
-        {
+        if (Random.Range(0, 10) > 8)
             numberText.SetText(number.ToString());
-        }
+        else
+            numberText.SetText(" ");
     }
 
     public void SetNumber(int number)
