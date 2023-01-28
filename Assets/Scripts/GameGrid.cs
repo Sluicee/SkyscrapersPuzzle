@@ -107,7 +107,7 @@ public class GameGrid : MonoBehaviour
         int highest2 = 1; //right
         int highest3 = 1; //top
         int highest4 = 1; //bottom
-        float gap = Vector3.Distance(gridSquares[0, 0].transform.position, gridSquares[0, 1].transform.position);
+        
         for (int row = 0; row < rows; row++)
         {
             counter1 = 1;
@@ -145,51 +145,11 @@ public class GameGrid : MonoBehaviour
                 }
             }
 
-            skyScrapers["-y" + row] = Instantiate(skyScrapersCount);
-            skyScrapers["-y" + row].transform.SetParent(skyScrapersCountGroup.transform);
-            skyScrapers["-y" + row].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
-            skyScrapers["-y" + row].GetComponent<TMP_Text>().SetText(counter1.ToString());
-            skyScrapers["-y" + row].transform.position = new Vector3(
-                gridSquares[row, 0].transform.position.x - gap, 
-                gridSquares[row, 0].transform.position.y, 
-                gridSquares[row, 0].transform.position.z
-                );
-
-            skyScrapers["+y" + row] = Instantiate(skyScrapersCount);
-            skyScrapers["+y" + row].transform.SetParent(skyScrapersCountGroup.transform);
-            skyScrapers["+y" + row].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
-            skyScrapers["+y" + row].GetComponent<TMP_Text>().SetText(counter2.ToString());
-            skyScrapers["+y" + row].transform.position = new Vector3(
-                gridSquares[row, columns - 1].transform.position.x + gap,
-                gridSquares[row, columns - 1].transform.position.y,
-                gridSquares[row, columns - 1].transform.position.z
-                );
-
-            skyScrapers["+x" + row] = Instantiate(skyScrapersCount);
-            skyScrapers["+x" + row].transform.SetParent(skyScrapersCountGroup.transform);
-            skyScrapers["+x" + row].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
-            skyScrapers["+x" + row].GetComponent<TMP_Text>().SetText(counter3.ToString());
-            skyScrapers["+x" + row].transform.position = new Vector3(
-                gridSquares[0, row].transform.position.x,
-                gridSquares[0, row].transform.position.y + gap,
-                gridSquares[0, row].transform.position.z
-                );
-
-            skyScrapers["-x" + row] = Instantiate(skyScrapersCount);
-            skyScrapers["-x" + row].transform.SetParent(skyScrapersCountGroup.transform);
-            skyScrapers["-x" + row].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
-            skyScrapers["-x" + row].GetComponent<TMP_Text>().SetText(counter4.ToString());
-            skyScrapers["-x" + row].transform.position = new Vector3(
-                gridSquares[columns - 1, row].transform.position.x,
-                gridSquares[columns - 1, row].transform.position.y - gap,
-                gridSquares[columns - 1, row].transform.position.z
-                );
+            SetSkyScrapersCount(counter1, "-y", row);
+            SetSkyScrapersCount(counter2, "+y", row);
+            SetSkyScrapersCount(counter3, "+x", row);
+            SetSkyScrapersCount(counter4, "-x", row);
         }
-
-/*        foreach (var item in skyScrapers)
-        {
-            Debug.Log("Key " + item.Key + " Value " + item.Value);
-        }*/
     }
 
     private void SpawnGridNumberButtons()
@@ -203,4 +163,32 @@ public class GameGrid : MonoBehaviour
         }
     }
 
+    private void SetSkyScrapersCount(int counter, string key, int row)
+    {
+        float gap = Vector3.Distance(gridSquares[0, 0].transform.position, gridSquares[0, 1].transform.position);
+        skyScrapers[key] = Instantiate(skyScrapersCount);
+        skyScrapers[key].transform.SetParent(skyScrapersCountGroup.transform);
+        skyScrapers[key].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
+        skyScrapers[key].GetComponent<TMP_Text>().SetText(counter.ToString());
+        Vector3 referenceElementPosition;
+        switch (key)
+        {
+            case "-y":
+                referenceElementPosition = gridSquares[row, 0].transform.position;
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x - gap, referenceElementPosition.y, 0);
+                break;
+            case "+y":
+                referenceElementPosition = gridSquares[row, columns - 1].transform.position;
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x + gap, referenceElementPosition.y, 0);
+                break;
+            case "+x":
+                referenceElementPosition = gridSquares[0, row].transform.position;
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y + gap, 0);
+                break;
+            case "-x":
+                referenceElementPosition = gridSquares[columns - 1, row].transform.position;
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y - gap, 0);
+                break;
+        }
+    }
 }

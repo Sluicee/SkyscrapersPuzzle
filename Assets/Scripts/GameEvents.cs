@@ -26,4 +26,14 @@ public class GameEvents : MonoBehaviour
             OnSquareSelected(SquareIndex);
         }
     }
+
+    public delegate void GameOver();
+    public static event GameOver OnGameOver;
+    public static void GameOverMethod()
+    {
+        if (OnGameOver != null)
+        {
+            OnGameOver();
+        }
+    }
 }

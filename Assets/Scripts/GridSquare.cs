@@ -16,6 +16,10 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
     private int squareIndex = -1;
     public void setSquareIndex(int index) {squareIndex = index; }
 
+    private bool hasDefault = false;
+    public void setHasDefault(bool value) { hasDefault = value;}
+    public bool isHasDefault() { return hasDefault;}
+
     void Start()
     {
         selected = false;
@@ -27,25 +31,31 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         
     }
 
-    public void DisplayText()
+    public void DisplayText(int number)
     {
-        numberText.SetText(number.ToString());
+        if (number > 0)
+            numberText.SetText(number.ToString());
+        else
+            numberText.SetText("");        
     }
 
     public void SetNumber(int number)
     {
         this.number = number;
-        DisplayText();
+        if(Random.Range(0, 100) >= 80)
+        {
+            DisplayText(number);
+            hasDefault = true;
+        }
+        else
+        {
+            DisplayText(0);
+        }
     }
 
     public int GetNumber()
     {
         return number;
-    }
-
-    public void GuessNumber(int number)
-    {
-        numberText.SetText(number.ToString());
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -73,9 +83,9 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
 
     public void OnSetNumber(int number)
     {
-        if (selected)
+        if (selected && !hasDefault)
         {
-            GuessNumber(number);
+            DisplayText(number);
         }
     }
 
