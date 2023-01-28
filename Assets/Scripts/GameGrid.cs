@@ -9,6 +9,7 @@ public class GameGrid : MonoBehaviour
     [Header ("Number Grid")]
     [Range(3, 9)]
     [SerializeField] private int columns = 0;
+    public int getSize { get { return columns; } }
     private int rows;
     [SerializeField] private float squareOffset = 0.0f;
     [SerializeField] private float squareScale = 1.0f;
@@ -25,6 +26,12 @@ public class GameGrid : MonoBehaviour
     private List<GameObject> numberButtons = new List<GameObject>();
 
     private GameObject[,] gridSquares;
+
+    public GameObject[,] getGridSquares
+    {
+        get { return gridSquares; }
+        private set { gridSquares = value; }
+    }
 
     void Start()
     {
@@ -207,5 +214,20 @@ public class GameGrid : MonoBehaviour
                 skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y - gap, 0);
                 break;
         }
+    }
+
+    public void OnSquareSelected(int squareIndex)
+    {
+        Highlighler.Instance.Highlight(squareIndex);
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnSquareSelected += OnSquareSelected;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnSquareSelected -= OnSquareSelected;
     }
 }

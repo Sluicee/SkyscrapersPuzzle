@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPointerUpHandler, IPointerExitHandler
+public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPointerUpHandler, IPointerExitHandler, IDeselectHandler
 {
     [SerializeField] private TMP_Text numberText;
     [SerializeField] private int number;
@@ -15,6 +15,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
 
     private int squareIndex = -1;
     public void setSquareIndex(int index) {squareIndex = index; }
+    public int getSquareIndex() { return squareIndex; }
 
     private bool hasDefault = false;
     public void setHasDefault(bool value) { hasDefault = value;}
@@ -94,6 +95,18 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         if (squareIndex != SquareIndex)
         {
             selected = false;
+            SetSquareColor(colors.normalColor);
         }
+        else
+        {
+            SetSquareColor(colors.pressedColor);
+        }
+    }
+
+    public void SetSquareColor(Color color)
+    {
+        var colors = this.colors;
+        colors.normalColor = color;
+        this.colors = colors;
     }
 }

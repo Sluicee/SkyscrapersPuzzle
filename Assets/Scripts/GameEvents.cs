@@ -36,4 +36,14 @@ public class GameEvents : MonoBehaviour
             OnGameOver();
         }
     }
+
+    public delegate void ButtonPressed();
+    public static event ButtonPressed OnButtonPressed;
+    public static void ButtonPressedMethod()
+    {
+        if (OnButtonPressed != null)
+        {
+            OnButtonPressed();
+        }
+    }
 }
