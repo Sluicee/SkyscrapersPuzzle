@@ -32,7 +32,7 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        if (timerRunning)
+        if (timerRunning && !GameController.instance.isPaused)
         {
             timerValue += Time.deltaTime;
             TimeSpan ts = TimeSpan.FromSeconds(timerValue);
@@ -48,7 +48,7 @@ public class Timer : MonoBehaviour
         return n.ToString().PadLeft(2, '0');
     }
 
-    public void OnGameOver()
+    public void StopTimer()
     {
         timerRunning = false;
     }
@@ -60,11 +60,11 @@ public class Timer : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnGameOver += OnGameOver;
+        GameEvents.OnGameOver += StopTimer;
     }
 
     private void OnDisable()
     {
-        GameEvents.OnGameOver -= OnGameOver;
+        GameEvents.OnGameOver -= StopTimer;
     }
 }

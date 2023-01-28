@@ -45,6 +45,9 @@ public class GameGrid : MonoBehaviour
 
     }
 
+    /*
+   Creates empty gameobjects (no numbers), with a GridLayout component attached to the parent that arranges these objects in a grid, and whose parameters are changed in this method.
+    */
     private void SpawnGridSquares()
     {
         int squareIndex = 0;
@@ -69,6 +72,11 @@ public class GameGrid : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(this.GetComponent<RectTransform>());
     }
 
+    /*
+    Creates a two-dimensional array of numbers. 
+    The nested array is row. This all creates a field in which the row and column cannot repeat numbers. 
+    I have no idea how this works, it's just copy-pasted.
+    */
     private void SetGridNumber()
     {
         int[][] board = new int[columns][];
@@ -96,6 +104,13 @@ public class GameGrid : MonoBehaviour
         }
     }
 
+    /*
+    Counts the number of visible skyscrapers in a column or row.
+    Each axis has a skyscraper count and the highest number at the moment of the enumeration. 
+    The search starts with the second number in the row/column and compares it to the previous number; if it is higher, the counter is incremented. 
+    During one cycle of the line/column search, each side of the playing field is compared at the same time. 
+    The variables row, columnLeft, columnRight are conditional and have nothing to do with row/column, as you might guess from the name, they are just for counting.
+    */
     private void SpawnSkyscrapersCount()
     {
 
@@ -152,6 +167,7 @@ public class GameGrid : MonoBehaviour
         }
     }
 
+    //spawn number on screen
     private void SpawnGridNumberButtons()
     {
         for(int i = 1; i <= columns; i++)
@@ -163,6 +179,7 @@ public class GameGrid : MonoBehaviour
         }
     }
 
+    //places numbers with the number of visible skyscrapers next to the row or column they belong to 
     private void SetSkyScrapersCount(int counter, string key, int row)
     {
         float gap = Vector3.Distance(gridSquares[0, 0].transform.position, gridSquares[0, 1].transform.position);

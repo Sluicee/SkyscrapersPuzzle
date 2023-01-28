@@ -9,4 +9,18 @@ public class MenuControls : MonoBehaviour
     {
         SceneManager.LoadScene(name);
     }
+
+    public void ActivateObject(GameObject gameObject)
+    {
+        gameObject.SetActive(true);
+    }
+    public void DisableObject(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void Pause(bool pause)
+    {
+        GameController.instance.isPaused = pause;
+    }
 }
