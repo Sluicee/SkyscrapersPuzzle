@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GameGrid : MonoBehaviour
 {
@@ -216,6 +217,27 @@ public class GameGrid : MonoBehaviour
         }
     }
 
+    public void CheckBoardCompleted()
+    {
+        bool result = false;
+        foreach (var square in gridSquares)
+        {
+            var comp = square.GetComponent<GridSquare>();
+            if (!comp.IsCorrect())
+            {
+                Debug.Log("Error");
+                result = false;
+                break;
+            }
+            else
+            {
+                Debug.Log("Correct");
+                result = true;
+            }
+        }
+        GameEvents.GameComplitedMethod(result);
+    }
+
     public void OnSquareSelected(int squareIndex)
     {
         Highlighler.Instance.Highlight(squareIndex);
@@ -230,4 +252,17 @@ public class GameGrid : MonoBehaviour
     {
         GameEvents.OnSquareSelected -= OnSquareSelected;
     }
+
+    //DEBUG
+    [ContextMenu("Solve")]
+    public void Solve()
+    {
+        foreach(var square in gridSquares)
+        {
+            var comp = square.GetComponent<GridSquare>();
+            comp.SetCorrectNumber();
+        }
+        CheckBoardCompleted();
+    }
+
 }

@@ -53,6 +53,11 @@ public class Timer : MonoBehaviour
         timerRunning = false;
     }
 
+    public string GetCurrentTime()
+    {
+        return instance.timerValue.ToString();
+    }
+
     public TMP_Text GetCurrentTimerText()
     {
         return timerText;

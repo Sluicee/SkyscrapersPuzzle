@@ -10,6 +10,11 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
 {
     [SerializeField] private TMP_Text numberText;
     [SerializeField] private int number;
+
+    private int guessedNumber;
+    public void setGuessedNumber(int number) { guessedNumber = number; }
+    public int getGuessedNumber() { return guessedNumber; }
+
     private bool selected = false;
     public bool isSelected() { return selected; }
 
@@ -21,15 +26,16 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
     public void setHasDefault(bool value) { hasDefault = value;}
     public bool isHasDefault() { return hasDefault;}
 
-    void Start()
+    public bool IsCorrect()
     {
-        selected = false;
+        return guessedNumber == number;
     }
 
-
-    void Update()
+    //DEBUG
+    public void SetCorrectNumber()
     {
-        
+        guessedNumber = number;
+        DisplayText(number);
     }
 
     public void DisplayText(int number)
@@ -47,6 +53,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         {
             DisplayText(number);
             hasDefault = true;
+            this.guessedNumber = number;
         }
         else
         {
@@ -70,22 +77,11 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         throw new System.NotImplementedException();
     }
 
-    private void OnEnable()
-    {
-        GameEvents.OnUpdateSquareNumber += OnSetNumber;
-        GameEvents.OnSquareSelected += OnSquareSelected;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnUpdateSquareNumber -= OnSetNumber;
-        GameEvents.OnSquareSelected -= OnSquareSelected;
-    }
-
     public void OnSetNumber(int number)
     {
         if (selected && !hasDefault)
         {
+            guessedNumber = number;
             DisplayText(number);
         }
     }
@@ -108,5 +104,28 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         var colors = this.colors;
         colors.normalColor = color;
         this.colors = colors;
+    }
+
+    public void ClearNumber()
+    {
+        if (selected && !hasDefault)
+        {
+            numberText.SetText("");
+            guessedNumber = 0;
+        }
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.OnUpdateSquareNumber += OnSetNumber;
+        GameEvents.OnSquareSelected += OnSquareSelected;
+        GameEvents.OnClearNumber += ClearNumber;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnUpdateSquareNumber -= OnSetNumber;
+        GameEvents.OnSquareSelected -= OnSquareSelected;
+        GameEvents.OnClearNumber -= ClearNumber;
     }
 }

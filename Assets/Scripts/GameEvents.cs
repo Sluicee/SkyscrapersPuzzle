@@ -46,4 +46,20 @@ public class GameEvents : MonoBehaviour
             OnButtonPressed();
         }
     }
+
+    public delegate void ClearNumber();
+    public static event ClearNumber OnClearNumber;
+    public static void ClearNumberMethod()
+    {
+        if (OnClearNumber != null)
+            OnClearNumber();
+    }
+
+    public delegate void GameComplited(bool win);
+    public static event GameComplited OnGameComplited;
+    public static void GameComplitedMethod(bool win)
+    {
+        if (OnGameComplited != null)
+            OnGameComplited(win);
+    }
 }
