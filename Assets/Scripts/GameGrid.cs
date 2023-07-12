@@ -1,13 +1,12 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
 public class GameGrid : MonoBehaviour
 {
-    [Header ("Number Grid")]
+    [Header("Number Grid")]
     [Range(3, 9)]
     [SerializeField] private int columns = 0;
     public int getSize { get { return columns; } }
@@ -26,6 +25,9 @@ public class GameGrid : MonoBehaviour
     [SerializeField] private GameObject numberButton;
     private List<GameObject> numberButtons = new List<GameObject>();
 
+    [Header("Check PopUp")]
+    [SerializeField] private GameObject checkPopUp;
+
     private GameObject[,] gridSquares;
 
     public GameObject[,] getGridSquares
@@ -38,14 +40,15 @@ public class GameGrid : MonoBehaviour
     {
         if (gridSquare.GetComponent<GridSquare>() == null)
             Debug.LogError("This Game Object need to have GridSquare script attached");
-
+        columns = int.Parse(StaticClass.CrossSceneInformation);
         rows = columns;
         gridSquares = new GameObject[rows, columns];
-        skyScrapers = new Dictionary<string, GameObject>(columns*4);
+        skyScrapers = new Dictionary<string, GameObject>(columns * 4);
         SpawnGridSquares();
         SetGridNumber();
         SpawnSkyscrapersCount();
         SpawnGridNumberButtons();
+        //gridSquare.SetActive(false);
     }
 
     void Update()
@@ -130,7 +133,7 @@ public class GameGrid : MonoBehaviour
         int highest2 = 1; //right
         int highest3 = 1; //top
         int highest4 = 1; //bottom
-        
+
         for (int row = 0; row < rows; row++)
         {
             counter1 = 1;
@@ -178,7 +181,7 @@ public class GameGrid : MonoBehaviour
     //spawn number on screen
     private void SpawnGridNumberButtons()
     {
-        for(int i = 1; i <= columns; i++)
+        for (int i = 1; i <= columns; i++)
         {
             numberButtons.Add(Instantiate(numberButton) as GameObject);
             numberButtons[numberButtons.Count - 1].transform.SetParent(numberButtonsGroup.transform);
@@ -238,6 +241,20 @@ public class GameGrid : MonoBehaviour
         GameEvents.GameComplitedMethod(result);
     }
 
+    public void CheckIsFilled()
+    {
+        foreach (var square in gridSquares)
+        {
+            var comp = square.GetComponent<GridSquare>();
+            if (comp.getGuessedNumber() == 0)
+            {
+                checkPopUp.SetActive(false);
+                return;
+            }
+        }
+        checkPopUp.SetActive(true);
+    }
+
     public void OnSquareSelected(int squareIndex)
     {
         Highlighler.Instance.Highlight(squareIndex);
@@ -257,7 +274,7 @@ public class GameGrid : MonoBehaviour
     [ContextMenu("Solve")]
     public void Solve()
     {
-        foreach(var square in gridSquares)
+        foreach (var square in gridSquares)
         {
             var comp = square.GetComponent<GridSquare>();
             comp.SetCorrectNumber();

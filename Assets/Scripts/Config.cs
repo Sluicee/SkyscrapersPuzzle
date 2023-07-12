@@ -6,11 +6,8 @@ using System.Text.RegularExpressions;
 
 public class Config : MonoBehaviour
 {
-#if UNITY_ANDROID && !UNITY_EDITOR
-    private static string dir = Application.persidentDataPath
-#else
+
     private static string dir = Directory.GetCurrentDirectory();
-#endif
 
     private static string file = @"\board_data.ini";
     private static string path = dir + file;

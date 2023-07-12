@@ -11,6 +11,13 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
     [SerializeField] private TMP_Text numberText;
     [SerializeField] private int number;
 
+    private GameObject grid;
+
+    public void Start()
+    {
+        grid = GameObject.Find("Grid");
+    }
+
     private int guessedNumber;
     public void setGuessedNumber(int number) { guessedNumber = number; }
     public int getGuessedNumber() { return guessedNumber; }
@@ -54,6 +61,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
             DisplayText(number);
             hasDefault = true;
             this.guessedNumber = number;
+            numberText.fontStyle = FontStyles.Italic;
         }
         else
         {
@@ -83,6 +91,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         {
             guessedNumber = number;
             DisplayText(number);
+            grid.GetComponent<GameGrid>().CheckIsFilled();
         }
     }
 
@@ -112,6 +121,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         {
             numberText.SetText("");
             guessedNumber = 0;
+            grid.GetComponent<GameGrid>().CheckIsFilled();
         }
     }
 

@@ -10,6 +10,12 @@ public class MenuControls : MonoBehaviour
         SceneManager.LoadScene(name);
     }
 
+    public void LoadGame(string size)
+    {
+        StaticClass.CrossSceneInformation = size;
+        SceneManager.LoadScene("GameScene");
+    }
+
     public void ActivateObject(GameObject gameObject)
     {
         gameObject.SetActive(true);
