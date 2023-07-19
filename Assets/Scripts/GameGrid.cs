@@ -40,7 +40,10 @@ public class GameGrid : MonoBehaviour
     {
         if (gridSquare.GetComponent<GridSquare>() == null)
             Debug.LogError("This Game Object need to have GridSquare script attached");
-        columns = int.Parse(StaticClass.CrossSceneInformation);
+        if (StaticClass.CrossSceneInformation != null)
+        {
+            columns = int.Parse(StaticClass.CrossSceneInformation);
+        }
         rows = columns;
         gridSquares = new GameObject[rows, columns];
         skyScrapers = new Dictionary<string, GameObject>(columns * 4);

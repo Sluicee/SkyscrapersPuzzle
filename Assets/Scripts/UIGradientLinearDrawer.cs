@@ -31,13 +31,19 @@ namespace Nox7atra.UIFigmaGradients
         protected override void Awake()
         {
             base.Awake();
+            GradientColorKey[] keys = _Gradient.colorKeys;
+            keys[0].color = Themes.theme[0];
+            keys[keys.Length - 1].color = Themes.theme[1];
+            _Gradient.colorKeys = keys;
             Refresh();
+            
         }
 
         public void SetGradient(Gradient gradient)
         {
             _Gradient = gradient;
             Refresh();
+
         }
 
         public Texture2D GenerateTexture(bool makeNoLongerReadable = false)

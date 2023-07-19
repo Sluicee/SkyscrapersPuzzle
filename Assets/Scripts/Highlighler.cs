@@ -11,6 +11,7 @@ public class Highlighler : MonoBehaviour
     private Color defaultColor;
     private GameObject[,] squares;
 
+
     public static Highlighler Instance { get; private set; }
 
     private void Awake()
@@ -21,39 +22,11 @@ public class Highlighler : MonoBehaviour
             Destroy(Instance);
     }
 
-    /*private void Start()
-    {
-        lineData = grid.getGridSquares;
-        foreach (GameObject i in lineData)
-        {
-            if (i.GetComponent<GridSquare>().getSquareIndex() == 30)
-            {
-                GetSquarePosition(i);
-            }
-        }
-    }
-
-    public void GetSquarePosition(GameObject square)
-    {
-        Debug.Log(Utils.findIndex(lineData, square));
-    }
-
-    public int[] GetColumn(int squareIndex)
-    {
-        int[] column = new int[grid.getSize];
-        return column;
-    }
-
-    public int[] GetRow(int squareIndex)
-    {
-        int[] row = new int[grid.getSize];
-        return row;
-    }*/
-
     private void Start()
     {
         squares = grid.getGridSquares;
         defaultColor = squares[0, 0].GetComponent<GridSquare>().colors.normalColor;
+        
     }
 
     //Highlight row and column of selected square

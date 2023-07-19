@@ -13,11 +13,13 @@ public class NumberButton : Selectable, IPointerClickHandler, ISubmitHandler, IP
 
     public void Start()
     {
+        Vibration.Init();
         buttonText.SetText(value.ToString());
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Vibration.VibrateAndroid(10);
         GameEvents.UpdateSquareNumberMethod(value);
     }
 

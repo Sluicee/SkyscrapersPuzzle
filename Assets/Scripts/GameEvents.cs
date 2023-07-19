@@ -62,4 +62,14 @@ public class GameEvents : MonoBehaviour
         if (OnGameComplited != null)
             OnGameComplited(win);
     }
+
+    public delegate void NotesActive(bool active);
+    public static event NotesActive OnNotesActive;
+    public static void OnNoteActiveMethod(bool active)
+    {
+        if (OnNotesActive != null)
+        {
+            OnNotesActive(active);
+        }
+    }
 }
