@@ -11,9 +11,12 @@ public class NoteButton : Selectable, IPointerClickHandler
 
     private bool active;
 
+    private AudioSource audioSource;
+
     void Start()
     {
-        active = false;    
+        active = false;
+        audioSource = GetComponent<AudioSource>();
     }
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -25,5 +28,6 @@ public class NoteButton : Selectable, IPointerClickHandler
             GetComponent<Image>().sprite = offImage;
 
         GameEvents.OnNoteActiveMethod(active);
+        audioSource.Play();
     }
 }

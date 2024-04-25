@@ -8,6 +8,7 @@ public class GameOver : MonoBehaviour
     [Header ("Game Complited")]
     [SerializeField] private GameObject winPopUp;
     [SerializeField] private GameObject losePopUp;
+    [SerializeField] private GameObject secondChanceButton;
     [SerializeField] private TMP_Text timerWinText;
     [SerializeField] private TMP_Text timerLoseText;
     [SerializeField] private GameObject checkPopUp;
@@ -33,6 +34,8 @@ public class GameOver : MonoBehaviour
         else
         {
             timerLoseText.SetText(Timer.instance.GetCurrentTimerText().text);
+            if (GameController.instance.GetSecondChance)
+                secondChanceButton.SetActive(false);
             losePopUp.SetActive(true);
         }
         

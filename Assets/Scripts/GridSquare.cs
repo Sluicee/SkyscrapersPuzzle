@@ -8,6 +8,8 @@ using UnityEngine.Events;
 
 public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPointerUpHandler, IPointerExitHandler, IDeselectHandler
 {
+    private AudioSource audioSource;
+
     [SerializeField] private TMP_Text numberText;
     [SerializeField] private int number;
 
@@ -27,6 +29,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         colors.pressedColor = Themes.theme[0];
         this.colors = colors;
         InitNotes(grid.GetComponent<GameGrid>().getSize);
+        audioSource = GetComponent<AudioSource>();
         SetNoteNumberValue(0);
     }
 
@@ -50,11 +53,9 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         return guessedNumber == number;
     }
 
-    //DEBUG
-    public void SetCorrectNumber()
+    public void SetCorrectNumber(int number)
     {
-        guessedNumber = number;
-        DisplayText(number);
+        this.number = number;
     }
 
     public void DisplayText(int number)
@@ -68,7 +69,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
     public void SetNumber(int number)
     {
         this.number = number;
-        if(Random.Range(0, 100) >= 80)
+        if(number != 0)
         {
             DisplayText(number);
             hasDefault = true;
@@ -91,6 +92,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         Vibration.VibrateAndroid(10);
         selected = true;
         GameEvents.SquareSelectedMethod(squareIndex);
+        audioSource.Play();
     }
 
     public void OnSubmit(BaseEventData eventData)
@@ -184,6 +186,11 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         }
     }
 
+    public void ClearNotes()
+    {
+        SetNoteNumberValue(0);
+    }
+
     private void SetNoteNumberValue(int value)
     {
         foreach( var number in notesNumber)
@@ -233,6 +240,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         GameEvents.OnUpdateSquareNumber += OnSetNumber;
         GameEvents.OnSquareSelected += OnSquareSelected;
         GameEvents.OnClearNumber += ClearNumber;
+        GameEvents.OnClearNumber += ClearNotes;
         GameEvents.OnNotesActive += NoteActive;
     }
 
@@ -241,6 +249,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         GameEvents.OnUpdateSquareNumber -= OnSetNumber;
         GameEvents.OnSquareSelected -= OnSquareSelected;
         GameEvents.OnClearNumber -= ClearNumber;
+        GameEvents.OnClearNumber -= ClearNotes;
         GameEvents.OnNotesActive -= NoteActive;
     }
 }

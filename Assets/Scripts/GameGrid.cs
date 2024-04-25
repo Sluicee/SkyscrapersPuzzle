@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine.UI;
 public class GameGrid : MonoBehaviour
 {
     [Header("Number Grid")]
-    [Range(3, 9)]
+    [Range(4, 6)]
     [SerializeField] private int columns = 0;
     public int getSize { get { return columns; } }
     private int rows;
@@ -36,6 +35,9 @@ public class GameGrid : MonoBehaviour
         private set { gridSquares = value; }
     }
 
+    private int selected_grid_data = -1;
+
+
     void Start()
     {
         if (gridSquare.GetComponent<GridSquare>() == null)
@@ -48,8 +50,8 @@ public class GameGrid : MonoBehaviour
         gridSquares = new GameObject[rows, columns];
         skyScrapers = new Dictionary<string, GameObject>(columns * 4);
         SpawnGridSquares();
-        SetGridNumber();
-        SpawnSkyscrapersCount();
+        SetGridNumber(columns);
+        SpawnSkyscrapersCount(columns);
         SpawnGridNumberButtons();
         //gridSquare.SetActive(false);
     }
@@ -91,9 +93,15 @@ public class GameGrid : MonoBehaviour
     The nested array is row. This all creates a field in which the row and column cannot repeat numbers. 
     I have no idea how this works, it's just copy-pasted.
     */
-    private void SetGridNumber()
+    private void SetGridNumber(int level)
     {
-        int[][] board = new int[columns][];
+        selected_grid_data = Random.Range(0, GridData.Instance.data[level].Count);
+        var data = GridData.Instance.data[level][selected_grid_data];
+        setGridSquareData(data);
+
+        
+
+        /*int[][] board = new int[columns][];
         for (int i = 0; i < columns; i++)
         {
             board[i] = new int[columns];
@@ -115,6 +123,20 @@ public class GameGrid : MonoBehaviour
             {
                 gridSquares[row, column].GetComponent<GridSquare>().SetNumber(board[row][column]);
             }
+        }*/
+    }
+
+    private void setGridSquareData(GridData.BoardData data)
+    {
+        int index = 0;
+        for (int row = 0; row < rows; row++)
+        {
+            for (int column = 0; column < columns; column++)
+            {
+                gridSquares[row, column].GetComponent<GridSquare>().SetNumber(data.unsolved_data[index]);
+                gridSquares[row, column].GetComponent<GridSquare>().SetCorrectNumber(data.solved_data[index]);
+                index++;
+            }
         }
     }
 
@@ -125,10 +147,19 @@ public class GameGrid : MonoBehaviour
     During one cycle of the line/column search, each side of the playing field is compared at the same time. 
     The variables row, columnLeft, columnRight are conditional and have nothing to do with row/column, as you might guess from the name, they are just for counting.
     */
-    private void SpawnSkyscrapersCount()
+    private void SpawnSkyscrapersCount(int level)
     {
+        var data = GridData.Instance.data[level][selected_grid_data];
 
-        int counter1 = 1; //left
+        for (int index = 0; index < rows; index++)
+        {
+            SetSkyScrapersCount(data.counter_data[0, index], "+x", index);
+            SetSkyScrapersCount(data.counter_data[1, index], "+y", index);
+            SetSkyScrapersCount(data.counter_data[2, index], "-x", index);
+            SetSkyScrapersCount(data.counter_data[3, index], "-y", index);
+        }
+
+        /*int counter1 = 1; //left
         int counter2 = 1; //right
         int counter3 = 1; //top
         int counter4 = 1; //bottom
@@ -178,7 +209,7 @@ public class GameGrid : MonoBehaviour
             SetSkyScrapersCount(counter2, "+y", row);
             SetSkyScrapersCount(counter3, "+x", row);
             SetSkyScrapersCount(counter4, "-x", row);
-        }
+        }*/
     }
 
     //spawn number on screen
@@ -200,7 +231,10 @@ public class GameGrid : MonoBehaviour
         skyScrapers[key] = Instantiate(skyScrapersCount);
         skyScrapers[key].transform.SetParent(skyScrapersCountGroup.transform);
         skyScrapers[key].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
-        skyScrapers[key].GetComponent<TMP_Text>().SetText(counter.ToString());
+        if (counter != 0)
+            skyScrapers[key].GetComponent<TMP_Text>().SetText(counter.ToString());
+        else
+            skyScrapers[key].GetComponent<TMP_Text>().SetText(" ");
         Vector3 referenceElementPosition;
         switch (key)
         {
@@ -273,7 +307,7 @@ public class GameGrid : MonoBehaviour
         GameEvents.OnSquareSelected -= OnSquareSelected;
     }
 
-    //DEBUG
+/*    //DEBUG
     [ContextMenu("Solve")]
     public void Solve()
     {
@@ -283,6 +317,6 @@ public class GameGrid : MonoBehaviour
             comp.SetCorrectNumber();
         }
         CheckBoardCompleted();
-    }
+    }*/
 
 }

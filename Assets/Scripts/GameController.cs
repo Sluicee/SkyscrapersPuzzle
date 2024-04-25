@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
+    private bool SecondChance = false;
 
     private void Awake()
     {
@@ -26,4 +27,13 @@ public class GameController : MonoBehaviour
         set { pause = value; }
     }
 
+    public void SecondChanceActivated()
+    {
+        SecondChance = true;
+    }
+
+    public bool GetSecondChance
+    {
+        get { return SecondChance; }
+    }
 }
