@@ -26,6 +26,7 @@ public class GameGrid : MonoBehaviour
 
     [Header("Check PopUp")]
     [SerializeField] private GameObject checkPopUp;
+    private int levelID;
 
     private GameObject[,] gridSquares;
 
@@ -97,6 +98,7 @@ public class GameGrid : MonoBehaviour
     {
         selected_grid_data = Random.Range(0, GridData.Instance.data[level].Count);
         var data = GridData.Instance.data[level][selected_grid_data];
+        levelID = selected_grid_data;
         setGridSquareData(data);
 
         
@@ -275,7 +277,7 @@ public class GameGrid : MonoBehaviour
                 result = true;
             }
         }
-        GameEvents.GameComplitedMethod(result);
+        GameEvents.GameComplitedMethod(result, levelID);
     }
 
     public void CheckIsFilled()

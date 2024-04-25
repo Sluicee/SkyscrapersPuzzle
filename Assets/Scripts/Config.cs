@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 public class Config : MonoBehaviour
 {
 
-    private static string dir = Directory.GetCurrentDirectory();
+    /*private static string dir = Directory.GetCurrentDirectory();
 
     private static string file = @"\board_data.ini";
     private static string path = dir + file;
@@ -71,5 +71,5 @@ public class Config : MonoBehaviour
 
         sr.Close();
         return solved;
-    }
+    }*/
 }

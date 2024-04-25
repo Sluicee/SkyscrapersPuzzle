@@ -55,12 +55,12 @@ public class GameEvents : MonoBehaviour
             OnClearNumber();
     }
 
-    public delegate void GameComplited(bool win);
+    public delegate void GameComplited(bool win, int levelID);
     public static event GameComplited OnGameComplited;
-    public static void GameComplitedMethod(bool win)
+    public static void GameComplitedMethod(bool win, int levelID)
     {
         if (OnGameComplited != null)
-            OnGameComplited(win);
+            OnGameComplited(win,levelID);
     }
 
     public delegate void NotesActive(bool active);

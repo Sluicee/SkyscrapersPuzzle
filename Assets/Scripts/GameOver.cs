@@ -22,7 +22,7 @@ public class GameOver : MonoBehaviour
         checkPopUp.SetActive(false);
     }
 
-    public void OnGameComplete(bool win)
+    public void OnGameComplete(bool win, int levelID)
     {
         Timer.instance.StopTimer();
         checkPopUp.SetActive(false);
@@ -30,6 +30,12 @@ public class GameOver : MonoBehaviour
         {
             timerWinText.SetText(Timer.instance.GetCurrentTimerText().text);
             winPopUp.SetActive(true);
+            if (!PlayerPrefs.HasKey(levelID.ToString()))
+            {
+                var count = PlayerPrefs.GetInt("complited");
+                PlayerPrefs.SetInt(levelID.ToString(), levelID);
+                PlayerPrefs.SetInt("complited", count+1);
+            }
         }
         else
         {

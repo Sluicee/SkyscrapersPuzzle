@@ -547,6 +547,11 @@ public class GridData : MonoBehaviour
             DontDestroyOnLoad(this);
             Instance = this;
         }
+
+        if (!PlayerPrefs.HasKey("complited"))
+        {
+            PlayerPrefs.SetInt("complited", 0);
+        }
     }
 
     void Start()

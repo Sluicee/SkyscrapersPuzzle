@@ -11,6 +11,7 @@ public class LevelCounter : MonoBehaviour
     [SerializeField] private int overall = 0;
     [SerializeField] private int complited = 0;
     [SerializeField] private TMP_Text overallText;
+    [SerializeField] private TMP_Text complitedText;
 
     private void Start()
     {
@@ -23,7 +24,9 @@ public class LevelCounter : MonoBehaviour
         {
             overall += GridData.Instance.data[i].Count;
         }
+        complited = PlayerPrefs.GetInt("complited");
         overallText.text = overall.ToString();
+        complitedText.text = complited.ToString();
     }
 
 }
