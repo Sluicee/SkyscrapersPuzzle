@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.Events;
+//using CrazyGames;
 
 public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPointerUpHandler, IPointerExitHandler, IDeselectHandler
 {
@@ -33,7 +32,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         SetNoteNumberValue(0);
     }
 
-    private int guessedNumber;
+    private int guessedNumber = 0;
     public void setGuessedNumber(int number) { guessedNumber = number; }
     public int getGuessedNumber() { return guessedNumber; }
 
@@ -89,7 +88,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Vibration.VibrateAndroid(10);
+        //Vibration.VibrateAndroid(10);
         selected = true;
         GameEvents.SquareSelectedMethod(squareIndex);
         audioSource.Play();
@@ -120,6 +119,34 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         }
     }
 
+    public void Hint()
+    {
+
+        //CRAZY SDK
+        /*CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            CrazySDK.Game.GameplayStop();
+        }, (error) =>
+        {
+            Debug.Log(error);
+        }, () =>
+        {
+            SetNoteNumberValue(0);
+            guessedNumber = number;
+            DisplayText(number);
+            grid.GetComponent<GameGrid>().CheckIsFilled();
+            CrazySDK.Game.GameplayStart();
+        });*/
+
+
+        //YG SDK
+        SetNoteNumberValue(0);
+        guessedNumber = number;
+        DisplayText(number);
+        grid.GetComponent<GameGrid>().CheckIsFilled();
+
+    }
+
     public void OnSquareSelected(int SquareIndex)
     {
         if (squareIndex != SquareIndex)
@@ -145,7 +172,7 @@ public class GridSquare : Selectable, IPointerClickHandler, ISubmitHandler, IPoi
         if (selected && !hasDefault)
         {
             numberText.SetText("");
-            Vibration.VibrateAndroid(10);
+            //Vibration.VibrateAndroid(10);
             guessedNumber = 0;
             grid.GetComponent<GameGrid>().CheckIsFilled();
         }

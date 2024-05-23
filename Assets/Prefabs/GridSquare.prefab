@@ -164,7 +164,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3960539216165671480}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -228,7 +228,6 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3960539215041250493}
-  audioClip: {fileID: 8095377304031475001, guid: 9786ff94c3fc2ee4c8935826de3f6e22, type: 3}
   numberText: {fileID: 3960539216341173722}
   number: 0
   notePrefab: {fileID: 5154713068922285926, guid: 85abf4a76cad63946a88765245e4c4d1, type: 3}

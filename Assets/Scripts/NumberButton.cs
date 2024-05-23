@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class NumberButton : Selectable, IPointerClickHandler, ISubmitHandler, IPointerUpHandler, IPointerExitHandler
@@ -14,14 +11,14 @@ public class NumberButton : Selectable, IPointerClickHandler, ISubmitHandler, IP
 
     public void Start()
     {
-        Vibration.Init();
+        //Vibration.Init();
         buttonText.SetText(value.ToString());
         audioSource = GetComponent<AudioSource>();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Vibration.VibrateAndroid(10);
+        //Vibration.VibrateAndroid(10);
         GameEvents.UpdateSquareNumberMethod(value);
         audioSource.Play();
     }

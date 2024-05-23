@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using System;
 
@@ -53,6 +51,11 @@ public class Timer : MonoBehaviour
         timerRunning = false;
     }
 
+    public void StartTimer()
+    {
+        timerRunning = true;
+    }
+
     public string GetCurrentTime()
     {
         return instance.timerValue.ToString();
@@ -61,6 +64,11 @@ public class Timer : MonoBehaviour
     public TMP_Text GetCurrentTimerText()
     {
         return timerText;
+    }
+
+    public int GetTime()
+    {
+        return (int)timerValue;
     }
 
     private void OnEnable()

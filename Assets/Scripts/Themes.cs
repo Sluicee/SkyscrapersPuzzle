@@ -11,9 +11,14 @@ public static class Themes
     private static Color brown = new Color(0.655f, 0.478f, 0.478f);
     private static Color darkRed = new Color(0.475f, 0.098f, 0.216f);
 
-    public static Color[,] themes = new Color[,] { { darkRed, brown }, { pink, blue },
-                                                   { aqua, purple }, { pink, lightBlue },
-                                                   { biege, brown } };
+    public static Color[,] themes = new Color[,] { { darkRed, brown }, 
+                                                   { pink, blue },
+                                                   { aqua, purple },
+                                                   { pink, lightBlue },
+                                                   { biege, brown },
+                                                   { lightBlue, blue },
+                                                   { lightBlue, purple }
+                                                 };
 
     static int rand = Random.Range(0, themes.Length / 2);
     public static Color[] theme = { themes[rand, 0], themes[rand, 1] };

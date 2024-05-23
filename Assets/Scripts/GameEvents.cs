@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
@@ -55,12 +53,12 @@ public class GameEvents : MonoBehaviour
             OnClearNumber();
     }
 
-    public delegate void GameComplited(bool win, int levelID);
+    public delegate void GameComplited(bool win, string levelID, int col);
     public static event GameComplited OnGameComplited;
-    public static void GameComplitedMethod(bool win, int levelID)
+    public static void GameComplitedMethod(bool win, string levelID, int col)
     {
         if (OnGameComplited != null)
-            OnGameComplited(win,levelID);
+            OnGameComplited(win,levelID, col);
     }
 
     public delegate void NotesActive(bool active);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 
 public class GameGrid : MonoBehaviour
 {
@@ -11,7 +12,9 @@ public class GameGrid : MonoBehaviour
     public int getSize { get { return columns; } }
     private int rows;
     [SerializeField] private float squareOffset = 0.0f;
-    [SerializeField] private float squareScale = 1.0f;
+    [SerializeField] private float squareScaleSmall = 1.0f;
+    [SerializeField] private float squareScaleLarge = 1.0f;
+    private float squareScale = 1.0f;
     [SerializeField] private GameObject gridSquare;
 
     [Header("Skyscrapers Count")]
@@ -26,9 +29,12 @@ public class GameGrid : MonoBehaviour
 
     [Header("Check PopUp")]
     [SerializeField] private GameObject checkPopUp;
-    private int levelID;
+    [SerializeField] private GameObject hintBtn;
+    private string levelID;
 
     private GameObject[,] gridSquares;
+
+    private MetricaSender metricaSender;
 
     public GameObject[,] getGridSquares
     {
@@ -47,6 +53,10 @@ public class GameGrid : MonoBehaviour
         {
             columns = int.Parse(StaticClass.CrossSceneInformation);
         }
+        if (columns > 5)
+            squareScale = squareScaleLarge;
+        else
+            squareScale = squareScaleSmall;
         rows = columns;
         gridSquares = new GameObject[rows, columns];
         skyScrapers = new Dictionary<string, GameObject>(columns * 4);
@@ -54,6 +64,13 @@ public class GameGrid : MonoBehaviour
         SetGridNumber(columns);
         SpawnSkyscrapersCount(columns);
         SpawnGridNumberButtons();
+        metricaSender.Send("lvlLoad");
+        if (YandexGame.savesData.firstTry)
+        {
+            metricaSender.TrigerSend("firstLvlStarted");
+            YandexGame.savesData.firstTry = false;
+            YandexGame.SaveProgress();
+        }
         //gridSquare.SetActive(false);
     }
 
@@ -96,9 +113,42 @@ public class GameGrid : MonoBehaviour
     */
     private void SetGridNumber(int level)
     {
-        selected_grid_data = Random.Range(0, GridData.Instance.data[level].Count);
+
+        /*if (PlayerPrefs.GetInt(level.ToString() + "lvl") != GridData.Instance.data[level].Count)
+        {
+            for (int i = 0; i < GridData.Instance.data[level].Count; ++i)
+            {
+                selected_grid_data = i;
+                if (!PlayerPrefs.HasKey(selected_grid_data.ToString() + level.ToString()))
+                {
+                    Debug.Log("Selected level: " + selected_grid_data);
+                    break;
+                }
+
+            }
+        }*/
+        if (YandexGame.savesData.lvls[level] != GridData.Instance.data[level].Count)
+        {
+            for (int i = 0; i < GridData.Instance.data[level].Count; ++i)
+            {
+                selected_grid_data = i;
+                if (!YandexGame.savesData.openLevels.Contains(selected_grid_data.ToString() + columns.ToString()))
+                {
+                    Debug.Log("Selected level: " + selected_grid_data);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            selected_grid_data = Random.Range(0, GridData.Instance.data[level].Count);
+            Debug.Log("Not equal. Random level " + selected_grid_data);
+
+        }
+
+
         var data = GridData.Instance.data[level][selected_grid_data];
-        levelID = selected_grid_data;
+        levelID = selected_grid_data.ToString() + columns.ToString();
         setGridSquareData(data);
 
         
@@ -232,7 +282,7 @@ public class GameGrid : MonoBehaviour
         float gap = Vector3.Distance(gridSquares[0, 0].transform.position, gridSquares[0, 1].transform.position);
         skyScrapers[key] = Instantiate(skyScrapersCount);
         skyScrapers[key].transform.SetParent(skyScrapersCountGroup.transform);
-        skyScrapers[key].transform.localScale = new Vector3(squareScale, squareScale, squareScale);
+        skyScrapers[key].transform.localScale = new Vector3(squareScale, squareScale, 100);
         if (counter != 0)
             skyScrapers[key].GetComponent<TMP_Text>().SetText(counter.ToString());
         else
@@ -242,19 +292,19 @@ public class GameGrid : MonoBehaviour
         {
             case "-y":
                 referenceElementPosition = gridSquares[row, 0].transform.position;
-                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x - gap, referenceElementPosition.y, 0);
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x - gap, referenceElementPosition.y, 100);
                 break;
             case "+y":
                 referenceElementPosition = gridSquares[row, columns - 1].transform.position;
-                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x + gap, referenceElementPosition.y, 0);
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x + gap, referenceElementPosition.y, 100);
                 break;
             case "+x":
                 referenceElementPosition = gridSquares[0, row].transform.position;
-                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y + gap, 0);
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y + gap, 100);
                 break;
             case "-x":
                 referenceElementPosition = gridSquares[columns - 1, row].transform.position;
-                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y - gap, 0);
+                skyScrapers[key].transform.position = new Vector3(referenceElementPosition.x, referenceElementPosition.y - gap, 100);
                 break;
         }
     }
@@ -277,7 +327,7 @@ public class GameGrid : MonoBehaviour
                 result = true;
             }
         }
-        GameEvents.GameComplitedMethod(result, levelID);
+        GameEvents.GameComplitedMethod(result, levelID, columns);
     }
 
     public void CheckIsFilled()
@@ -288,10 +338,41 @@ public class GameGrid : MonoBehaviour
             if (comp.getGuessedNumber() == 0)
             {
                 checkPopUp.SetActive(false);
+                hintBtn.SetActive(true);
                 return;
             }
         }
         checkPopUp.SetActive(true);
+        hintBtn.SetActive(false);
+    }
+
+    private void Hint()
+    {
+        foreach (var square in gridSquares)
+        {
+            var comp = square.GetComponent<GridSquare>();
+            if ((comp.getGuessedNumber() == 0 || !comp.IsCorrect()) && !comp.isHasDefault())
+            {
+                Debug.Log("Hinted!");
+                comp.Hint();
+                metricaSender.TrigerSend("Hinted");
+                return;
+            }
+        }
+    }
+
+    public void PressHint()
+    {
+        metricaSender.TrigerSend("HintPressed");
+        YandexGame.RewVideoShow(1); // 1 = hint award
+    }
+
+    private void Rewarded(int id)
+    {
+        if (id == 1)
+        {
+            Hint();
+        }
     }
 
     public void OnSquareSelected(int squareIndex)
@@ -302,11 +383,13 @@ public class GameGrid : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnSquareSelected += OnSquareSelected;
+        YandexGame.RewardVideoEvent += Rewarded;
     }
 
     private void OnDisable()
     {
         GameEvents.OnSquareSelected -= OnSquareSelected;
+        YandexGame.RewardVideoEvent -= Rewarded;
     }
 
 /*    //DEBUG
